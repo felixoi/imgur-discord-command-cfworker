@@ -1,0 +1,26 @@
+{
+  "name": "imgur-discord-bot-cfworkers",
+  "version": "0.0.1",
+  "description": "Discord bot for uploading images to imgur.com deployable using cloudflare workers",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felixoi/imgur-discord-bot-cfworkers.git"
+  },
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "cfworker",
+    "cloudflare-workers",
+    "cloudflare"
+  ],
+  "author": "felixoi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/felixoi/imgur-discord-bot-cfworkers/issues"
+  },
+  "homepage": "https://github.com/felixoi/imgur-discord-bot-cfworkers#readme",
+  "dependencies": {
+    "@glenstack/cf-workers-discord-bot": "^1.1.1"
+  }
+}
