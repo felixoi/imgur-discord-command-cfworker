@@ -1,0 +1,9 @@
+name = "imgur-discord-bot-cfworker"
+type = "webpack"
+webpack_config = "webpack.config.js"
+
+account_id = ""
+workers_dev = true
+route = ""
+zone_id = ""
+compatibility_date = "2021-10-16"

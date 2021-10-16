@@ -1,26 +1,36 @@
 {
-  "name": "imgur-discord-bot-cfworkers",
-  "version": "0.0.1",
-  "description": "Discord bot for uploading images to imgur.com deployable using cloudflare workers",
-  "main": "index.js",
+  "name": "imgur-discord-command-cfworker",
+  "version": "1.0.0",
+  "description": "Discord slash-command for uploading to imgur.com! Deployable on Cloudflare Workers.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/felixoi/imgur-discord-bot-cfworkers.git"
+    "url": "git+https://github.com/felixoi/imgur-discord-command-cfworker.git"
   },
   "keywords": [
     "discord",
     "discord-bot",
     "cfworker",
     "cloudflare-workers",
-    "cloudflare"
+    "cloudflare",
+    "imgur",
+    "imgur-discord",
+    "imgur-discord-bot"
   ],
   "author": "felixoi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/felixoi/imgur-discord-bot-cfworkers/issues"
+    "url": "https://github.com/felixoi/imgur-discord-command-cfworker/issues"
   },
-  "homepage": "https://github.com/felixoi/imgur-discord-bot-cfworkers#readme",
+  "homepage": "https://github.com/felixoi/imgur-discord-command-cfworker#readme",
   "dependencies": {
     "@glenstack/cf-workers-discord-bot": "^1.1.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.0.0",
+    "@types/node": "^15.12.1",
+    "ts-loader": "^8.3.0",
+    "typescript": "^4.3.2",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^3.3.12"
   }
 }
