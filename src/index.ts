@@ -10,7 +10,7 @@ import {ApplicationCommandOptionType} from "@glenstack/cf-workers-discord-bot/di
 
 const command: ApplicationCommand = {
     name: "imgur",
-    description: "Upload content from an URL to imgur!",
+    description: "Upload content from an URL to imgur.com!",
     options: [
         {
             type: ApplicationCommandOptionType.STRING,
@@ -25,7 +25,7 @@ function unknownError(userID: string): any {
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
-            content: `Hey, <@${userID}> the imgur upload failed (Unknown Error)!`,
+            content: `Hey <@${userID}>, the imgur upload failed (unknown error)!`,
             allowed_mentions: {
                 users: [userID],
             },
@@ -59,7 +59,7 @@ const commandHandler: InteractionHandler = async (
         return {
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                content: `Hey, <@${userID}> the imgur upload failed (Authentication Error)!`,
+                content: `Hey <@${userID}>, the imgur upload failed (authentication error)!`,
                 allowed_mentions: {
                     users: [userID],
                 },
@@ -90,7 +90,7 @@ const commandHandler: InteractionHandler = async (
         return {
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
-                content: `Hey, <@${userID}> the imgur upload failed (Upload Error)!`,
+                content: `Hey <@${userID}>, the imgur upload failed (upload error)!`,
                 allowed_mentions: {
                     users: [userID],
                 },
@@ -101,7 +101,7 @@ const commandHandler: InteractionHandler = async (
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
-            content: `Hey, <@${userID}> the imgur upload has been finished successfully: ${json2.data.link}`,
+            content: `Hey <@${userID}>, the imgur upload has been finished successfully: ${json2.data.link}`,
             allowed_mentions: {
                 users: [userID],
             },
