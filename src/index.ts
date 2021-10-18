@@ -33,7 +33,7 @@ const command: ApplicationCommand = {
  * @param userID the user id of the command dispatcher
  * @param message the message to follow after the user ping
  */
-function messageDispatcher(userID: string, message: string) {
+function messageDispatcher(userID: string, message: string): InteractionResponse {
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
@@ -50,7 +50,7 @@ function messageDispatcher(userID: string, message: string) {
  *
  * @param userID the user id of the command dispatcher
  */
-function unknownError(userID: string): any {
+function unknownError(userID: string): InteractionResponse {
     return messageDispatcher(userID, "the imgur upload failed (unknown error)!");
 }
 
@@ -58,20 +58,20 @@ function unknownError(userID: string): any {
  * Authenticates against the imgur api using the refresh token to retrieve an access token.
  */
 const retrieveImgurAccessToken: any = async (): Promise<any> => {
-    const body = {
+    const body: any = {
         refresh_token: `${IMGUR_REFRESH_TOKEN}`,
         client_id: `${IMGUR_CLIENT_ID}`,
         client_secret: `${IMGUR_CLIENT_SECRET}`,
         grant_type: 'refresh_token'
     }
-    const init = {
+    const init: RequestInitializerDict = {
         body: JSON.stringify(body),
         method: "POST",
         headers: {
             "content-type": "application/json;charset=UTF-8",
         },
     }
-    const response = await fetch("https://api.imgur.com/oauth2/token", init)
+    const response: Response = await fetch("https://api.imgur.com/oauth2/token", init)
 
     return response.json();
 }
@@ -81,11 +81,9 @@ const retrieveImgurAccessToken: any = async (): Promise<any> => {
  *
  * @param interaction the interaction data
  */
-const commandHandler: InteractionHandler = async (
-    interaction: Interaction
-): Promise<InteractionResponse> => {
-    const userID = interaction.member.user.id;
-    const authObj = await retrieveImgurAccessToken();
+const commandHandler: InteractionHandler = async (interaction: Interaction): Promise<InteractionResponse> => {
+    const userID: string = interaction.member.user.id;
+    const authObj: any = await retrieveImgurAccessToken();
 
     if(!authObj.access_token) {
         return messageDispatcher(userID, "the imgur upload failed (authentication error)!");
@@ -96,10 +94,10 @@ const commandHandler: InteractionHandler = async (
     const urlOption = interaction.data.options.pop();
     if(!urlOption) return unknownError(userID);
 
-    const body = {
+    const body: any = {
         image: urlOption.value
     }
-    const init = {
+    const init: RequestInitializerDict = {
         body: JSON.stringify(body),
         method: "POST",
         headers: {
@@ -107,7 +105,7 @@ const commandHandler: InteractionHandler = async (
             "content-type": "application/json;charset=UTF-8",
         },
     }
-    const response = await fetch("https://api.imgur.com/3/image", init)
+    const response: Response = await fetch("https://api.imgur.com/3/image", init)
     const json: any = await response.json()
 
     if(!json.success) {
