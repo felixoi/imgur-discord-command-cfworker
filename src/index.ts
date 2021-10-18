@@ -7,6 +7,7 @@ import {
     InteractionResponseType,
 } from "@glenstack/cf-workers-discord-bot";
 import {ApplicationCommandOptionType} from "@glenstack/cf-workers-discord-bot/dist/types";
+import {basicAuthentication, verifyCredentials, BadRequestException, AuthData} from "./auth";
 
 /**
  * The command specification.
@@ -126,9 +127,75 @@ const slashCommandHandler = createSlashCommandHandler({
 });
 
 /**
- * Adds an event listener for the fetch event to always respond with the slash command handler logic provided by the
- * library.
+ * Handles the incoming HTTP request and executes the required logic for the different routes.
+ *
+ * Modified code from https://developers.cloudflare.com/workers/examples/basic-auth
+ * Copyright (c) 2021 Cloudflare, Inc.
+ * License: https://github.com/cloudflare/cloudflare-docs/blob/8be04aec617170d777ef7d0e3e001f5d6eb1e60f/LICENSE
+ *
+ * @param {Request} request Incoming HTTP request
+ * @returns {Promise<Response>} Promise of the response to answer the request
+ */
+async function handleRequest(request: Request): Promise<Response> {
+    const { protocol, pathname } = new URL(request.url)
+
+    // In the case of a "Basic" authentication, the exchange
+    // MUST happen over an HTTPS (TLS) connection to be secure.
+    if ('https:' !== protocol || 'https' !== request.headers.get('x-forwarded-proto')) {
+        throw BadRequestException('Please use a HTTPS connection.')
+    }
+
+    switch (pathname) {
+        case '/favicon.ico':
+        case '/robots.txt':
+            return new Response(null, { status: 204 })
+        case '/interaction':
+            return slashCommandHandler(request);
+        default:
+            if (request.headers.has('Authorization')) {
+                // Throws exception when authorization fails.
+                const { user, pass }: AuthData = basicAuthentication(request)
+                verifyCredentials(user, pass)
+
+                // Only returns this response when no exception is thrown.
+                return slashCommandHandler(request);
+            }
+
+            // Not authenticated.
+            return new Response('You need to login.', {
+                status: 401,
+                headers: {
+                    // Prompts the user for credentials.
+                    'WWW-Authenticate': 'Basic realm="login", charset="UTF-8"'
+                }
+            })
+    }
+}
+
+
+/**
+ * Adds an event listener to the fetch event to execute the program logic on site fetch.
+ *
+ * Unmodified code from https://developers.cloudflare.com/workers/examples/basic-auth
+ * Copyright (c) 2021 Cloudflare, Inc.
+ * License: https://github.com/cloudflare/cloudflare-docs/blob/8be04aec617170d777ef7d0e3e001f5d6eb1e60f/LICENSE
  */
 self.addEventListener('fetch', (event: FetchEvent) => {
-    event.respondWith(slashCommandHandler(event.request));
+    event.respondWith(
+        handleRequest(event.request).catch(err => {
+            const message = err.reason || err.stack || 'Unknown Error'
+
+            return new Response(message, {
+                status: err.status || 500,
+                statusText: err.statusText || null,
+                headers: {
+                    'Content-Type': 'text/plain;charset=UTF-8',
+                    // Disables caching by default.
+                    'Cache-Control': 'no-store',
+                    // Returns the "Content-Length" header for HTTP HEAD requests.
+                    'Content-Length': message.length,
+                }
+            })
+        })
+    )
 });

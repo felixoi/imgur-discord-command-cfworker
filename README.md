@@ -24,3 +24,5 @@ Deployable on Cloudflare Workers.
 | `DISCORD_APPLICATION_ID`     | https://discord.com/developers/applications/ (Tab: General Information) |
 | `DISCORD_APPLICATION_SECRET` | https://discord.com/developers/applications/ (Tab: OAuth2, named Client Secret) |
 | `DISCORD_PUBLIC_KEY`         | https://discord.com/developers/applications/ (Tab: General Information) |
+| `HTTP_BASIC_USER`            | Your choice |
+| `HTTP_BASIC_PASSWORD`        | Your choice |

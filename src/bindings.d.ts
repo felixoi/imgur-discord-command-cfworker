@@ -28,4 +28,12 @@ declare global {
      * Public key of the registered discord application.
      */
     const DISCORD_PUBLIC_KEY: string;
+    /**
+     * Username for HTTP Basic Authentication.
+     */
+    const HTTP_BASIC_USER: string;
+    /**
+     * Password for HTTP Basic Authentication.
+     */
+    const HTTP_BASIC_PASSWORD: string;
 }
