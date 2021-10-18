@@ -16,7 +16,7 @@ Deployable on Cloudflare Workers.
 9. Open `${WORKER_URL}` in your browser and add the integration to the discord server of your choice
 10. Use `/imgur url` on the discord server to easily upload content from the specified url to imgur.
 
-| Worker Secrets               | Source |
+| Worker Secret                | Source |
 |------------------------------|----- |
 | `IMGUR_CLIENT_ID`            | https://api.imgur.com/oauth2/addclient (OAuth 2 authorization without a callback URL) |
 | `IMGUR_CLIENT_SECRET`        | https://api.imgur.com/oauth2/addclient (OAuth 2 authorization without a callback URL) |
