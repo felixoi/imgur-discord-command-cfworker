@@ -21,16 +21,20 @@ const command: ApplicationCommand = {
     ]
 };
 
-function unknownError(userID: string): any {
+function messageDispatcher(userID: string, message: string) {
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
-            content: `Hey <@${userID}>, the imgur upload failed (unknown error)!`,
+            content: `Hey <@${userID}>, ${message}`,
             allowed_mentions: {
                 users: [userID],
             },
         }
     }
+}
+
+function unknownError(userID: string): any {
+    return messageDispatcher(userID, "the imgur upload failed (unknown error)!");
 }
 
 const commandHandler: InteractionHandler = async (
@@ -56,15 +60,7 @@ const commandHandler: InteractionHandler = async (
     const json1: any = await re1.json()
 
     if(!json1.access_token) {
-        return {
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: {
-                content: `Hey <@${userID}>, the imgur upload failed (authentication error)!`,
-                allowed_mentions: {
-                    users: [userID],
-                },
-            },
-        };
+        return messageDispatcher(userID, "the imgur upload failed (authentication error)!");
     }
 
     if(!interaction.data || !interaction.data.options) return unknownError(userID);
@@ -87,26 +83,10 @@ const commandHandler: InteractionHandler = async (
     const json2: any = await re2.json()
 
     if(!json2.success) {
-        return {
-            type: InteractionResponseType.ChannelMessageWithSource,
-            data: {
-                content: `Hey <@${userID}>, the imgur upload failed (upload error)!`,
-                allowed_mentions: {
-                    users: [userID],
-                },
-            },
-        };
+        return messageDispatcher(userID, "the imgur upload failed (upload error)!");
     }
 
-    return {
-        type: InteractionResponseType.ChannelMessageWithSource,
-        data: {
-            content: `Hey <@${userID}>, the imgur upload has been finished successfully: ${json2.data.link}`,
-            allowed_mentions: {
-                users: [userID],
-            },
-        },
-    };
+    return messageDispatcher(userID, `the imgur upload has been finished successfully: ${json2.data.link}`);
 };
 
 const slashCommandHandler = createSlashCommandHandler({
