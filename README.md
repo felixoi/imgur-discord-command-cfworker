@@ -11,8 +11,7 @@ Deployable on Cloudflare Workers.
 4. [Configure the secrets](https://developers.cloudflare.com/workers/platform/environment-variables) described below for the cloudflare worker
 5. Dispatch the Github Action `Deploy` manually
 6. Wait for a successful deployment...
-7. In the Discord Developer Portal set the application `Interactions Endpoint URL` to `${WORKER_URL}/interaction`   
-(e.g. `https://my-discord-bot.workers.dev/interaction`)
+7. In the Discord Developer Portal set the application `Interactions Endpoint URL` to `${WORKER_URL}/interaction` (e.g. `https://my-discord-bot.workers.dev/interaction`)
 8. Open `${WORKER_URL}/setup` in your browser (this needs to be done every time the command is updated)
 9. Open `${WORKER_URL}` in your browser and add the integration to the discord server of your choice
 10. Use `/imgur url` on the discord server to easily upload content from the specified url to imgur.
