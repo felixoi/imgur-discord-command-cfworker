@@ -1,13 +1,13 @@
 import {
     ApplicationCommand,
+    ApplicationCommandOptionType,
     createSlashCommandHandler,
     Interaction,
     InteractionHandler,
     InteractionResponse,
     InteractionResponseType,
 } from "@glenstack/cf-workers-discord-bot";
-import {ApplicationCommandOptionType} from "@glenstack/cf-workers-discord-bot/dist/types";
-import {basicAuthentication, verifyCredentials, BadRequestException, AuthData} from "./auth";
+import {AuthData, BadRequestException, basicAuthentication, verifyCredentials} from "./auth";
 
 /**
  * The command specification.
@@ -21,6 +21,13 @@ const command: ApplicationCommand = {
             name: "url",
             description: "Content URL",
             required: true
+        },
+        {
+            type: ApplicationCommandOptionType.BOOLEAN,
+            name: "link-only",
+            description: "Whether the bot should only answer with the image link on success",
+            required: false,
+            default: false
         }
     ]
 };
@@ -86,14 +93,17 @@ const commandHandler: InteractionHandler = async (interaction: Interaction): Pro
     const userID: string = interaction.member.user.id;
     const authObj: any = await retrieveImgurAccessToken();
 
-    if(!authObj.access_token) {
+    if (!authObj.access_token) {
         return messageDispatcher(userID, `<@${userID}>, the imgur upload failed (authentication error)!`);
     }
 
     // Just in case. This should never happen as the command option is marked as required.
-    if(!interaction.data || !interaction.data.options) return unknownError(userID);
-    const urlOption = interaction.data.options.pop();
-    if(!urlOption) return unknownError(userID);
+    if (!interaction.data || !interaction.data.options) return unknownError(userID);
+    const urlOption = interaction.data.options.find(d => d.name == 'url');
+    if (!urlOption) return unknownError(userID);
+
+    const linkOnlyOption = interaction.data.options.find(d => d.name == 'link-only');
+    const linkOnly: boolean = linkOnlyOption ? linkOnlyOption.value : false;
 
     const body: any = {
         image: urlOption.value
@@ -109,11 +119,15 @@ const commandHandler: InteractionHandler = async (interaction: Interaction): Pro
     const response: Response = await fetch("https://api.imgur.com/3/image", init)
     const json: any = await response.json()
 
-    if(!json.success) {
+    if (!json.success) {
         return messageDispatcher(userID, `<@${userID}>, the imgur upload failed (upload error)!`);
     }
 
-    return messageDispatcher(userID, `${json.data.link}`);
+    if (linkOnly) {
+        return messageDispatcher(userID, `${json.data.link}`);
+    } else {
+        return messageDispatcher(userID, `<@${userID}>, the imgur upload has been finished successfully: ${json.data.link}`);
+    }
 };
 
 /**
@@ -137,7 +151,7 @@ const slashCommandHandler = createSlashCommandHandler({
  * @returns {Promise<Response>} Promise of the response to answer the request
  */
 async function handleRequest(request: Request): Promise<Response> {
-    const { protocol, pathname } = new URL(request.url)
+    const {protocol, pathname} = new URL(request.url)
 
     // In the case of a "Basic" authentication, the exchange
     // MUST happen over an HTTPS (TLS) connection to be secure.
@@ -148,13 +162,13 @@ async function handleRequest(request: Request): Promise<Response> {
     switch (pathname) {
         case '/favicon.ico':
         case '/robots.txt':
-            return new Response(null, { status: 204 })
+            return new Response(null, {status: 204})
         case '/interaction':
             return slashCommandHandler(request);
         default:
             if (request.headers.has('Authorization')) {
                 // Throws exception when authorization fails.
-                const { user, pass }: AuthData = basicAuthentication(request)
+                const {user, pass}: AuthData = basicAuthentication(request)
                 verifyCredentials(user, pass)
 
                 // Only returns this response when no exception is thrown.
