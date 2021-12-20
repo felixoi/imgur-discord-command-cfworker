@@ -38,7 +38,7 @@ function messageDispatcher(userID: string, message: string): InteractionResponse
     return {
         type: InteractionResponseType.ChannelMessageWithSource,
         data: {
-            content: `Hey <@${userID}>, ${message}`,
+            content: `${message}`,
             allowed_mentions: {
                 users: [userID],
             },
@@ -52,7 +52,7 @@ function messageDispatcher(userID: string, message: string): InteractionResponse
  * @param userID the user id of the command dispatcher
  */
 function unknownError(userID: string): InteractionResponse {
-    return messageDispatcher(userID, "the imgur upload failed (unknown error)!");
+    return messageDispatcher(userID, `<@${userID}>, the imgur upload failed (unknown error)!`);
 }
 
 /**
@@ -87,7 +87,7 @@ const commandHandler: InteractionHandler = async (interaction: Interaction): Pro
     const authObj: any = await retrieveImgurAccessToken();
 
     if(!authObj.access_token) {
-        return messageDispatcher(userID, "the imgur upload failed (authentication error)!");
+        return messageDispatcher(userID, `<@${userID}>, the imgur upload failed (authentication error)!`);
     }
 
     // Just in case. This should never happen as the command option is marked as required.
@@ -110,10 +110,10 @@ const commandHandler: InteractionHandler = async (interaction: Interaction): Pro
     const json: any = await response.json()
 
     if(!json.success) {
-        return messageDispatcher(userID, "the imgur upload failed (upload error)!");
+        return messageDispatcher(userID, `<@${userID}>, the imgur upload failed (upload error)!`);
     }
 
-    return messageDispatcher(userID, `the imgur upload has been finished successfully: ${json.data.link}`);
+    return messageDispatcher(userID, `${json.data.link}`);
 };
 
 /**
