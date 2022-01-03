@@ -1,9 +1,30 @@
-name = "imgur-discord-command"
-type = "webpack"
-webpack_config = "webpack.config.js"
+name = "imgur-discord-bot-cfworker"
+type = "javascript"
+account_id="4a4939cf550a9f3cafa95a46c56e8953"
 
-account_id = ""
-workers_dev = true
-route = ""
-zone_id = ""
-compatibility_date = "2021-10-16"
+route = "discord-imgur.felixoi.com/*"
+workers_dev = false
+
+compatibility_date = "2021-12-27"
+compatibility_flags = []
+
+kv_namespaces = [
+    { binding = "IMGUR_ACCESS_TOKEN", id = "42ba2154baf0426ea890456027203db4", preview_id = "<ignored>" }
+]
+
+[build]
+command = "node scripts/build.js production"
+[build.upload]
+format = "modules"
+main = "./index.mjs"
+
+[env.development.build]
+command = "node scripts/build.js development"
+[env.development.build.upload]
+format = "modules"
+main = "./index.mjs"
+
+[miniflare]
+kv_persist = true
+cache_persist = true
+durable_objects_persist = true
