@@ -1,6 +1,7 @@
-import {authorizeResponse, createHandler} from "slshx";
-import { imgurCommand } from "./imgur-command";
-import { imgur } from "./imgur-message-command";
+import {createHandler} from "slshx";
+import {imgurCommand} from "./imgur-command";
+import {imgur} from "./imgur-message-command";
+import { captureError } from '@cfworker/sentry';
 
 const handler = createHandler({
   // Replaced by esbuild when bundling, see scripts/build.js (do not edit)
@@ -13,4 +14,30 @@ const handler = createHandler({
   messageCommands: { "Upload to Imgur": imgur },
 });
 
-export default { fetch: handler };
+export default {
+  async fetch(request: Request, environment: Env, context: ExecutionContext) {
+    // production mode -> report errors to sentry
+    if(ENVIRONMENT === "production") {
+      try {
+        return await handler(request, environment, context);
+      } catch (err) {
+        const { event_id, posted } = captureError(
+            environment.SENTRY_DSN,
+            ENVIRONMENT,
+            RELEASE,
+            err,
+            request,
+            null
+        );
+        context.waitUntil(posted);
+        return new Response(`Internal server error. Event ID: ${event_id}`, {
+          status: 500
+        });
+      }
+    }
+    // development mode -> just print errors to console
+    else {
+      return handler(request, environment, context);
+    }
+  }
+};

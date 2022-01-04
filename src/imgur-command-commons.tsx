@@ -1,6 +1,9 @@
 import {CommandResponse, createElement, Message} from "slshx";
 import {ImgurClient, retrieveImgurClient} from "./imgur-api";
-import {printErrorMessage} from "./imgur-message-command";
+
+function printImgurErrorObject(imgurResponse: ImgurAPIResponse<ImageData | ImgurError>) {
+    throw new Error(`Imgur API returned an error: ${JSON.stringify(imgurResponse)}`)
+}
 
 export async function handleImageUpload(env: Env, urls: string[]): Promise<CommandResponse> {
     const api: ImgurClient = await retrieveImgurClient(env,
@@ -24,15 +27,15 @@ export async function handleImageUpload(env: Env, urls: string[]): Promise<Comma
 
         if (succeeded < total) {
             response.filter(v => !v.success).forEach((v: ImgurAPIResponse<ImageData | ImgurError>) => {
-                printErrorMessage((v as ImgurAPIResponse<ImgurError>).data.error)
+                printImgurErrorObject(v)
             })
         }
     } else {
         total = 1;
         if ((response.data as ImgurError).error) {
-            const errorData: ImgurErrorData = (response.data as ImgurError).error
+            const errorData: ImgurAPIResponse<ImageData | ImgurError> = response
             urlLinks = "";
-            printErrorMessage(errorData)
+            printImgurErrorObject(errorData)
         } else {
             urlLinks = (response.data as ImageData).link;
             succeeded++;

@@ -1,1 +1,1 @@
-# imgur-discord-bot-cfworker
+# imgur-discord-command-cfworker

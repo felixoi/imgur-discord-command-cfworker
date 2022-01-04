@@ -1,5 +1,9 @@
 import { build } from "esbuild";
 import { env } from "./env.js";
+import { readFileSync } from "fs"
+
+const packageJson = readFileSync('./package.json')
+const version = JSON.parse(packageJson).version || "0.0.0"
 
 const argv = process.argv.slice(2);
 
@@ -62,6 +66,8 @@ const define = {
   SLSHX_TEST_SERVER_ID: includeTestServer
     ? JSON.stringify(testServerId)
     : "undefined",
+  ENVIRONMENT: JSON.stringify(mode),
+  RELEASE: JSON.stringify(version),
 };
 if (removeDeployCode) {
   // Force globalThis.MINIFLARE to be false, so esbuild can remove dead-code

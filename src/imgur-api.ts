@@ -6,6 +6,7 @@ export async function retrieveImgurClient(env: Env, refreshToken: string, client
     const accessToken = await env.IMGUR_ACCESS_TOKEN.get(ACCESS_TOKEN_KEY);
 
     if (accessToken != null) {
+        console.log("[INFO] Using cached access token")
         return new ImgurClient(accessToken);
     }
 
@@ -26,6 +27,7 @@ export async function retrieveImgurClient(env: Env, refreshToken: string, client
     let response: Response = await fetch("https://api.imgur.com/oauth2/token", init);
 
     return response.json<ImgurTokenResponse>().then((d: ImgurTokenResponse) => {
+        console.log("[INFO] Using fetched access token")
         env.IMGUR_ACCESS_TOKEN.put(ACCESS_TOKEN_KEY, d.access_token, {expirationTtl: d.expires_in - 60})
         return new ImgurClient(d.access_token);
     });
