@@ -23,3 +23,5 @@ jobs:
         env:
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
+          APPLICATION_PUBLIC_KEY: ${{ secrets.APPLICATION_PUBLIC_KEY }}

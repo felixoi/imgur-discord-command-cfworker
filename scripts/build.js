@@ -28,8 +28,8 @@ const includeTestServer = mode === "development";
 
 const testServerId = env.testServerId;
 const application = useProductionApplication ? env.production : env.development;
-const applicationId = application?.applicationId;
-const applicationPublicKey = application?.applicationPublicKey;
+const applicationId = process.env.APPLICATION_ID || application?.applicationId;
+const applicationPublicKey = process.env.APPLICATION_PUBLIC_KEY || application?.applicationPublicKey;
 const applicationSecret = application?.applicationSecret;
 
 // Validate environment
