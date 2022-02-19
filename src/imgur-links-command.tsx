@@ -3,7 +3,7 @@ import {handleImageUpload} from "./imgur-command-commons"
 
 // `Env` contains bindings and is declared in types/env.d.ts
 export function imgurLinksCommand(): CommandHandler<Env> {
-    useDescription("Upload specified images from urls to Imgur");
+    useDescription("Upload images from urls to Imgur");
     const urls: string = useString("urls", "URLs separated by spaces", {required: true});
 
     return (interaction, env, ctx) => {

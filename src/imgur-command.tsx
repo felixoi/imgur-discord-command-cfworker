@@ -4,7 +4,7 @@ import {handleImageUpload} from "./imgur-command-commons"
 
 // `Env` contains bindings and is declared in types/env.d.ts
 export function imgurCommand(): CommandHandler<Env> {
-    useDescription("Upload specified images from urls to Imgur");
+    useDescription("Upload images to Imgur");
     const attachment: APIAttachment = useAttachment("attachment1", "Image to upload",{required: true});
     const attachment2: APIAttachment | null = useAttachment("attachment2", "Image to upload",{required: false});
     const attachment3: APIAttachment | null = useAttachment("attachment3", "Image to upload",{required: false});
