@@ -1,4 +1,5 @@
 import {createHandler} from "slshx";
+import {imgurLinksCommand} from "./imgur-links-command";
 import {imgurCommand} from "./imgur-command";
 import {imgur} from "./imgur-message-command";
 import { captureError } from '@cfworker/sentry';
@@ -10,7 +11,7 @@ const handler = createHandler({
   applicationSecret: SLSHX_APPLICATION_SECRET,
   testServerId: SLSHX_TEST_SERVER_ID,
   // Add your commands here
-  commands: { imgur: imgurCommand },
+  commands: { 'imgur-links': imgurLinksCommand, 'imgur': imgurCommand },
   messageCommands: { "Upload to Imgur": imgur },
 });
 
