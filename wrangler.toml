@@ -1,7 +1,7 @@
 name = "imgur-discord-command"
 type = "javascript"
 
-route = "discord-imgur.felixoi.com/*"
+route = "discord-command-imgur.fxoi.io/*"
 workers_dev = false
 
 compatibility_date = "2021-12-27"
