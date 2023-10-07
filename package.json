@@ -12,8 +12,8 @@
     "slshx": "^0.3.0"
   },
   "devDependencies": {
-    "@cfworker/sentry": "^1.12.1",
-    "@cloudflare/workers-types": "^3.4.0",
+    "@cfworker/sentry": "^2.0.0",
+    "@cloudflare/workers-types": "^4.20231002.0",
     "esbuild": "^0.14.23",
     "miniflare": "^2.3.0"
   }
