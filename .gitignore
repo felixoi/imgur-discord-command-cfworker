@@ -1,7 +1,8 @@
 .DS_Store
 .idea
-dist
 node_modules
-env.jsonc
-.mf
+.cloudflare
 .env
+.dev.vars
+# Legacy slshx config, kept locally only
+env.jsonc

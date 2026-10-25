@@ -1,26 +1,18 @@
 {
   "compilerOptions": {
-    // For Cloudflare Workers
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "lib": ["esnext"],
-    "types": ["@cloudflare/workers-types"],
-
-    // For Slshx JSX
-    "jsx": "react",
-    "jsxFactory": "createElement",
-    "jsxFragmentFactory": "Fragment",
-
-    // Required by esbuild
-    "isolatedModules": true,
-
-    "noEmit": true,
+    "types": [],
     "strict": true,
-    "esModuleInterop": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    // Lets Node run src/register.ts directly via type stripping
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "resolveJsonModule": true
   },
-  "include": [
-    "src",
-    "types"
-  ]
+  "include": ["src", "cloudflare.config.ts", "vite.config.ts", ".cloudflare/types"]
 }
