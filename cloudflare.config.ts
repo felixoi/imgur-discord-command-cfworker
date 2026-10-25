@@ -8,7 +8,7 @@ export default defineConfig({
     compatibilityDate: "2026-10-01",
     workersDev: false,
     triggers: [
-      triggers.fetch({ pattern: "discord-command-imgur.fxoi.io/*", zone: "fxoi.io" }),
+      triggers.fetch({ pattern: "imgur-upload-discord.felixoi.com/*", zone: "felixoi.com" }),
     ],
     observability: {
       enabled: true,
